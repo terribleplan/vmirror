@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Video</title>
+  <style>
+    video {
+      height: auto;
+      max-height: 100vh;
+      width: 100vw;
+    }
+    video.flip {
+      -moz-transform: scale(-1, 1);
+      -webkit-transform: scale(-1, 1);
+      transform: scale(-1, 1);
+    }
+    html, body {
+      margin: 0;
+    }
+  </style>
+</head>
+<body>
+</body>
+<script>
+  const video = document.createElement('video');
+  if (window.location.search === "?flip") {
+    video.className = 'flip';
+  }
+  video.controls = false;
+  const error = (text) => {
+    const p = document.createElement('p');
+    p.innerText = text;
+    document.body.appendChild(p);
+  }
+  document.body.appendChild(video);
+  if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+    navigator.mediaDevices.getUserMedia({ video: true }).then(function(stream) {
+      video.src = window.URL.createObjectURL(stream);
+      video.play();
+    }, (e) => text(e.message));
+  } else {
+    error('No media devices found.');
+  }
+</script>
+</html>
